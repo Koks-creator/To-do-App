@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\WebApka.props" />
+</Project>
