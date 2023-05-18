@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Show Records";
+
+    List<UserModel> users = TempData["users"] as List<UserModel>;
+    List<string> columns = TempData["columns"] as List<string>;
+    
+}
+
+<div class="container">
+    @*@if(ViewBag.users != null && ViewBag.users.Count > 0)*@
+    @if(users != null && users.Count > 0)
+    {
+        <form action="/home/SearchUser" method="post">
+            <div class="form-group">
+                <label>Search</label>
+                <input type="text" name="">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    @* make it (headers) dynamic *@
+                    @foreach (var column in columns)
+                    {
+                        <th scope="col">@column</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in users)
+                {
+                    <tr>
+                        @foreach (var prop in typeof(UserModel).GetProperties())
+                        {   
+                            <td>@prop.GetValue(user)</td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
+        </table>    
+    }
+</div>

@@ -1,0 +1,103 @@
+@model WebApka.Models.TaskModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "MyTasks";
+    var userTasks = (Dictionary<string, List<TaskModel>>) ViewData["Tasks"];
+}
+
+<div class="container text-center">
+  <div class="row">
+    @foreach (KeyValuePair<string, List<TaskModel>> taskGroup in userTasks)
+    {
+    <div class="col">
+        @taskGroup.Key
+        <hr>
+        @foreach (var task in taskGroup.Value)
+        {   
+            <div class="card">
+                <div class="card-header">
+                    <div style="float: left; align: left">
+                        <div style="text-align:left;font-size: 10px;">
+                            <b>Due time: @task.EndTime</b>
+                            <br>
+                            @{
+                                var timeDiff = task.EndTime.Subtract(DateTime.Now);
+                                var timeLeft = $"{timeDiff.Days}d {timeDiff.Hours}H {timeDiff.Minutes}m {timeDiff.Seconds}s";
+                            }
+                            @if(taskGroup.Key != "Done"){
+                                @if(timeDiff.Days <= 1){
+                                    <b style="color: red;">Time left: @timeLeft</b>
+                                }
+                                else
+                                {
+                                    <b>Time left: @timeLeft</b>
+                                }
+                            }
+                            else
+                            {
+                                <b style="color: green;">Done</b>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="height: 150px;">
+                    <div align="left">
+                        <p style="color: gray; font-size: 12px;">Created at: @task.CreatedAt</p>
+                    </div>
+                    <a href="/account/ViewTask/@task.id" style="color: black;"><h5 class="card-title">@task.Title</h5></a>
+                    @if(task.Content.Length < 100)
+                    {
+                        <p class="card-text">@task.Content.</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">@task.Content.Substring(0, 100)...</p>
+                    }
+                    
+                </div>
+                <div class="card-footer text-muted">
+                    <div style="float: left; text-align: left">
+                        <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post">
+                            <select asp-for="Status" style="height: 35px;">
+                                <option value="In Progress">In Progress</option>
+                                <option value="Done">Done</option>
+                                <option value="Blocked">Blocked</option>
+                            </select>
+
+                            <button style="font-size: 14px;" type="submit" class="btn btn-primary">Change</button>
+                        </form>
+
+                        <button type="button" class="btn btn-danger" style="font-size: 14px;" data-bs-toggle="modal" data-bs-target="#exampleModal-@task.id">
+                            Delete
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal-@task.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/account/DeleteTask/@task.id" method="post">
+                                    <button  style="font-size: 14px;" type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="/account/UpdateTask/@task.id"><button style="font-size: 14px;" type="button" class="btn btn-primary">Update</button></a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+        }
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+    string accountStateMessage = TempData["accountStateMessage"] as string;
+}
+
+@if(accountStateMessage != null)
+{
+  <div class="alert alert-success" role="alert">
+    @accountStateMessage
+  </div>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>

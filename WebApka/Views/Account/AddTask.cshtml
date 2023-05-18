@@ -1,0 +1,28 @@
+@model WebApka.Models.TaskModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "AddTask";
+}
+<p>Wartość zmiennej "foo" w sesji to: @Context.Session.GetString("username")</p>
+@* <div asp-validation-summary="All" class="text-danger"></div> *@
+<form action="/account/addtask" method="post">
+  <div class="mb-3">
+    <label for="Title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="Title" asp-for="Title">
+    <span asp-validation-for="Title" class="text-danger"></span>
+  </div>
+
+  <div class="mb-3">
+    <label for="Content" class="form-label">Content</label>
+    <textarea class="form-control" id="Content" asp-for="Content"></textarea>
+    <span asp-validation-for="Content" class="text-danger"></span>
+  </div>
+
+  <div class="mb-3">
+    <label for="EndTime" class="form-label">EndTime</label>
+    <input type="date" class="form-control" id="EndTime" asp-for="EndTime">
+    <span asp-validation-for="EndTime" class="text-danger"></span>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

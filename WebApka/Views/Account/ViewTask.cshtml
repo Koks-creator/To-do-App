@@ -1,0 +1,97 @@
+@model WebApka.Models.TaskModel
+@{
+    ViewData["Title"] = "View task";
+
+    string taskId = TempData["TaskId"] as string;
+    TaskModel task = ViewData["Task"] as TaskModel;
+}
+
+<div style="align: center; margin-top: 50px; margin-left: 40px; margin-right: 40px;" align="center">
+    <div class="container" >
+        <div class="row" >
+            <div class="col">
+                <div style="height: 550px;">
+                  <div class="card" style="max-height: 500px;">
+                      <div class="card-header" style="text-align: left;">
+                          <div style="float: left; align: left">
+                              <h2>@task.Title</h2>
+                          </div>
+                          <div style="float: right; align: right">
+                            <!-- Button trigger modal -->
+                              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Delete
+                              </button>
+                              <a href="/account/UpdateTask/@task.id"><button style="font-size: 14px;" type="button" class="btn btn-primary">Update</button></a>
+                          </div>
+                          
+                      </div>
+                      <div class="card-body" style="overflow: auto;text-align: left;">
+                          <p>@task.Content</p>
+                      </div>
+                  </div>
+                </div>
+                
+            </div>
+            <div class="col-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div style="text-align:left;font-size: 15px;">
+                        <b>Due time: @task.EndTime</b>
+                        <br>
+                        @{
+                            var timeDiff = task.EndTime.Subtract(DateTime.Now);
+                            var timeLeft = $"{timeDiff.Days}d {timeDiff.Hours}H {timeDiff.Minutes}m {timeDiff.Seconds}s";
+                        }
+                        @if(task.Status != "Done"){
+                            @if(timeDiff.Days <= 1){
+                                <b style="color: red;">Time left: @timeLeft</b>
+                            }
+                            else
+                            {
+                                <b>Time left: @timeLeft</b>
+                            }
+                        }
+                        else
+                        {
+                            <b style="color: green;">Done</b>
+                        }
+                        <br>
+                        <b>Status: @task.Status</b>
+                        <hr>
+                        <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post">
+                            <select asp-for="Status" style="height: 35px;">
+                                <option value="In Progress">In Progress</option>
+                                <option value="Done">Done</option>
+                                <option value="Blocked">Blocked</option>
+                            </select>
+
+                            <button style="font-size: 14px;" type="submit" class="btn btn-primary">Change</button>
+                        </form>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/account/DeleteTask/@task.id" method="post">
+          <button  style="font-size: 14px;" type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
