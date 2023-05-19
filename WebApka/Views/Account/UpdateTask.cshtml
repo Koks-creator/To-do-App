@@ -1,0 +1,28 @@
+@model WebApka.Models.TaskModel
+@{
+    ViewData["Title"] = "AddTask";
+    TaskModel task = ViewData["Task"] as TaskModel;
+}
+
+<form action="/account/UpdateTask" method="post">
+  <div class="mb-3">
+    <label for="Title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="Title" asp-for="Title" value=@task.Title>
+    <span asp-validation-for="Title" class="text-danger"></span>
+  </div>
+
+  <div class="mb-3">
+    <label for="Content" class="form-label">Content</label>
+    <textarea class="form-control" id="Content" asp-for="Content">xfgfgdfg</textarea>
+    <span asp-validation-for="Content" class="text-danger"></span>
+  </div>
+
+  <div class="mb-3">
+    <label for="EndTime" class="form-label">EndTime</label>
+    @{string taskEndDate = task.EndTime.ToString("yyyy-MM-dd");}
+    <input type="date" class="form-control" id="EndTime" asp-for="EndTime" value=@taskEndDate>
+    <span asp-validation-for="EndTime" class="text-danger"></span>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
