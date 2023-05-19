@@ -268,6 +268,10 @@ public class AccountController : Controller
     public IActionResult DeleteTask(int id)
     {   
         string username = HttpContext.Session.GetString("username");
+        if(username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
         
         using(var db = new DemoContext())
         {   
@@ -277,6 +281,23 @@ public class AccountController : Controller
             
         }
         return RedirectToAction("MyTasks", "Account");
+    }
+
+    public IActionResult UpdateTask(int id)
+    {
+        string username = HttpContext.Session.GetString("username");
+        if(username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        using(var db = new DemoContext())
+        {   
+            TaskModel task = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
+            ViewData["Task"] = task;
+        }
+
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
