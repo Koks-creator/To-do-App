@@ -17,7 +17,7 @@ public class AccountController : Controller
     {
         string username = HttpContext.Session.GetString("username");
         if( username != null ){
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Index", "Home");
         }
 
         return View();
@@ -297,6 +297,34 @@ public class AccountController : Controller
             ViewData["Task"] = task;
         }
 
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult UpdateTask(int id, UpdateTaskDto task)
+    {   
+        string username = HttpContext.Session.GetString("username");
+        if(username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+    
+        using(var db = new DemoContext())
+        {   
+            TaskModel taskToUpdate = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
+            ViewData["Task"] = taskToUpdate;
+            if(ModelState.IsValid)
+            {
+                taskToUpdate.Title = task.Title;
+                taskToUpdate.Content = task.Content;
+                taskToUpdate.EndTime = task.EndTime;
+                db.SaveChanges();
+
+                return RedirectToAction("ViewTask", "Account", new { id = id });
+            }
+        }
+        
         return View();
     }
 
