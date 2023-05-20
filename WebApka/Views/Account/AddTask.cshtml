@@ -1,9 +1,8 @@
 @model WebApka.Models.TaskModel
-@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "AddTask";
 }
-<p>Wartość zmiennej "foo" w sesji to: @Context.Session.GetString("username")</p>
+
 @* <div asp-validation-summary="All" class="text-danger"></div> *@
 <form action="/account/addtask" method="post">
   <div class="mb-3">
