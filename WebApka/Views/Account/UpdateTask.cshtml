@@ -1,10 +1,11 @@
 @model WebApka.Models.TaskModel
 @{
-    ViewData["Title"] = "AddTask";
+    ViewData["Title"] = "UpdateTask";
     TaskModel task = ViewData["Task"] as TaskModel;
+    
 }
 
-<form action="/account/UpdateTask" method="post">
+<form action="/account/updatetask/@task.id" method="post">
   <div class="mb-3">
     <label for="Title" class="form-label">Title</label>
     <input type="text" class="form-control" id="Title" asp-for="Title" value=@task.Title>
@@ -12,8 +13,9 @@
   </div>
 
   <div class="mb-3">
-    <label for="Content" class="form-label">Content</label>
-    <textarea class="form-control" id="Content" asp-for="Content">xfgfgdfg</textarea>
+    <label for="Content" class="form-label">New Content</label>
+    <textarea class="form-control" id="ContentInput" oninput="syncInputs(this.value)"></textarea>
+    <input type="hidden" id="Content" asp-for="Content" oninput="syncInputs(this.value)" />
     <span asp-validation-for="Content" class="text-danger"></span>
   </div>
 
@@ -26,3 +28,17 @@
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<script>
+    function syncInputs(value) {
+        document.getElementById("ContentInput").value = value;
+        document.getElementById("Content").value = value;
+
+    }
+
+    // Set the default value on page load
+    window.addEventListener("load", function() {
+      var defaultValue = "@task.Content"; // Replace with your desired default value
+      syncInputs(defaultValue);
+    });
+</script>
