@@ -21,7 +21,7 @@
                               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Delete
                               </button>
-                              <a href="/account/UpdateTask/@task.id"><button style="font-size: 14px;" type="button" class="btn btn-primary">Update</button></a>
+                              <a asp-action="UpdateTask" asp-route-Id=@task.id><button style="font-size: 14px;" type="button" class="btn btn-primary">Update</button></a>
                           </div>
                           
                       </div>

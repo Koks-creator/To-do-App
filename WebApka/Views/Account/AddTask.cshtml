@@ -3,8 +3,7 @@
     ViewData["Title"] = "AddTask";
 }
 
-@* <div asp-validation-summary="All" class="text-danger"></div> *@
-<form action="/account/addtask" method="post">
+<form asp-action="AddTask" method="post">
   <div class="mb-3">
     <label for="Title" class="form-label">Title</label>
     <input type="text" class="form-control" id="Title" asp-for="Title">

@@ -42,7 +42,7 @@
                         <button type="button" class="btn btn-danger" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal-@task.id">
                             Delete
                         </button>
-                        <a href="/account/UpdateTask/@task.id"><button style="font-size: 10px;" type="button" class="btn btn-primary">Update</button></a>
+                        <a asp-action="UpdateTask" asp-route-Id=@task.id><button style="font-size: 10px;" type="button" class="btn btn-primary">Update</button></a>
 
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal-@task.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,9 +83,10 @@
                     
                 </div>
                 <div class="card-footer text-muted">
-                    <div style="float: left; text-align: left">
-                        <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post">
-                            <select asp-for="Status" style="height: 35px;">
+                    <div style="text-align: center">
+                        @* <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post"> *@
+                        <form asp-action="UpdateTaskStatus" asp-route-taskId=@task.id method="post">
+                            <select asp-for="Status">
                                 <option value="In Progress">In Progress</option>
                                 <option value="Done">Done</option>
                                 <option value="Blocked">Blocked</option>
