@@ -84,15 +84,14 @@
                 </div>
                 <div class="card-footer text-muted">
                     <div style="text-align: center">
-                        @* <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post"> *@
                         <form asp-action="UpdateTaskStatus" asp-route-taskId=@task.id method="post">
-                            <select asp-for="Status">
+                            <select style="width: 180px; display: inline; height: 35px;" class="form-select" asp-for="Status">
                                 <option value="In Progress">In Progress</option>
                                 <option value="Done">Done</option>
                                 <option value="Blocked">Blocked</option>
                             </select>
 
-                            <button style="font-size: 14px;" type="submit" class="btn btn-primary">Change</button>
+                            <button style="font-size: 14px;margin-bottom:5px;" type="submit" class="btn btn-primary">Change</button>
                         </form>
                     </div>
                 </div>

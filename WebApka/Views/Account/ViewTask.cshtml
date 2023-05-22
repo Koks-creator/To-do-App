@@ -21,7 +21,11 @@
                               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Delete
                               </button>
-                              <a asp-action="UpdateTask" asp-route-Id=@task.id><button style="font-size: 14px;" type="button" class="btn btn-primary">Update</button></a>
+                              <a asp-action="UpdateTask" asp-route-Id=@task.id>
+                                <button type="button" class="btn btn-primary">
+                                  Update
+                                </button>
+                              </a>
                           </div>
                           
                       </div>
@@ -58,14 +62,14 @@
                         <br>
                         <b>Status: @task.Status</b>
                         <hr>
-                        <form action="/account/UpdateTaskStatus?taskId=@task.id" method="post">
-                            <select asp-for="Status" style="height: 35px;">
+                        <form asp-action="UpdateTaskStatus" asp-route-taskId=@task.id method="post">
+                            <select style="width: 270px; display: inline; height: 35px;" class="form-select" asp-for="Status">
                                 <option value="In Progress">In Progress</option>
                                 <option value="Done">Done</option>
                                 <option value="Blocked">Blocked</option>
                             </select>
 
-                            <button style="font-size: 14px;" type="submit" class="btn btn-primary">Change</button>
+                            <button style="font-size: 14px;margin-bottom:5px;" type="submit" class="btn btn-primary">Change</button>
                         </form>
 
                       </div>
