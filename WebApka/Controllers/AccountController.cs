@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApka.Models;
 
@@ -70,7 +71,7 @@ public class AccountController : Controller
 
                     TempData["accountCreatedMessage"] = "Account has been created! Log in to your accoun";
 
-                    return RedirectToAction("Login", "Account", new { area = "" });
+                    return RedirectToAction("Login", "Account");
                 }
 
                 TempData["emailError"] = emailError;
@@ -84,19 +85,23 @@ public class AccountController : Controller
     public IActionResult Login()
     {   
         string username = HttpContext.Session.GetString("username");
-        if( username != null ){
-            return RedirectToAction("Index", "Home", new { area = "" });
-        }
+        Console.WriteLine(username);
+        
+        // if( username != null ){
+        //     return RedirectToAction("Index", "Home");
+        // }
+        Console.WriteLine(Request.QueryString.ToString());
+        TempData["RedirectUrl"] = Request.QueryString.ToString().Replace("?ReturnUrl=%2F", "").Replace("%2F", "/");
         return View();
     }
 
     [HttpPost]
     public IActionResult Login(string username, string password)
     {   
-        string user_name = HttpContext.Session.GetString("username");
-        if( user_name != null ){
-            return RedirectToAction("Index", "Home", new { area = "" });
-        }
+        // string user_name = HttpContext.Session.GetString("username");
+        // if( user_name != null ){
+        //     return RedirectToAction("Index", "Home");
+        // }
 
         if(ModelState.IsValid)
         {   
@@ -110,7 +115,22 @@ public class AccountController : Controller
                     HttpContext.Session.SetString("username", username);
                     TempData["accountStateMessage"] = "You are logged in!";
 
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                    // return RedirectToAction("Index", "Home");
+                    if (TempData["RedirectUrl"].ToString() == "")
+                    {      
+                        return RedirectToAction("Index", "Home");
+                    }else
+                    {   
+                        string ReturnUrl = TempData["RedirectUrl"].ToString();
+                        // Console.WriteLine(ReturnUrl);
+                        var results = ReturnUrl.Split('/');
+                        string controller = results[0];
+                        string view = results[1];
+                        // Console.WriteLine(view);
+
+
+                        return RedirectToAction(view, controller);
+                    }
                 }
                 else
                 {
@@ -122,13 +142,14 @@ public class AccountController : Controller
         return View();
     }
 
+    [Authorize]
     public IActionResult Logout()
     {   
         
         string username = HttpContext.Session.GetString("username");
-        if( username == null ){
-            return RedirectToAction("Index", "Home", new { area = "" });
-        }
+        // if( username == null ){
+        //     return RedirectToAction("Index", "Home", new { area = "" });
+        // }
 
         HttpContext.Session.Clear();
 
@@ -136,23 +157,25 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home", new { area = "" });
     }
 
+    [Authorize]
     public IActionResult AddTask()
     {   
         string username = HttpContext.Session.GetString("username");
-        if( username == null ){
-            return RedirectToAction("Login", "Account", new { area = "" });
-        }
+        // if( username == null ){
+        //     return RedirectToAction("Login", "Account");
+        // }
 
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult AddTask(CreateTaskDto task)
     {   
         string username = HttpContext.Session.GetString("username");
-        if( username == null ){
-            return RedirectToAction("Login", "Account", new { area = "" });
-        }
+        // if( username == null ){
+        //     return RedirectToAction("Login", "Account");
+        // }
 
         if(ModelState.IsValid)
         {   
@@ -178,13 +201,14 @@ public class AccountController : Controller
         return View();
     }
 
+    [Authorize]
     public IActionResult MyTasks()
     {   
         string username = HttpContext.Session.GetString("username");
 
-        if( username == null ){
-            return RedirectToAction("Login", "Account");
-        }
+        // if( username == null ){
+        //     return RedirectToAction("Login", "Account");
+        // }
 
         using (var db = new DemoContext())
         {   
@@ -211,6 +235,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult UpdateTaskStatus(int taskId, UpdateTaskStatusDto updatedTask)
     {   
         string referringUrl = HttpContext.Request.Headers["Referer"].ToString();
@@ -239,14 +264,15 @@ public class AccountController : Controller
         
     }
 
+    [Authorize]
     public IActionResult ViewTask(int id)
     {   
         string username = HttpContext.Session.GetString("username");
 
-        if(username == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+        // if(username == null)
+        // {
+        //     return RedirectToAction("Login", "Account");
+        // }
 
         using(var db = new DemoContext())
         {   
@@ -265,13 +291,14 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult DeleteTask(int id)
     {   
         string username = HttpContext.Session.GetString("username");
-        if(username == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+        // if(username == null)
+        // {
+        //     return RedirectToAction("Login", "Account");
+        // }
         
         using(var db = new DemoContext())
         {   
@@ -283,13 +310,14 @@ public class AccountController : Controller
         return RedirectToAction("MyTasks", "Account");
     }
 
+    [Authorize]
     public IActionResult UpdateTask(int id)
     {
         string username = HttpContext.Session.GetString("username");
-        if(username == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+        // if(username == null)
+        // {
+        //     return RedirectToAction("Login", "Account");
+        // }
 
         using(var db = new DemoContext())
         {   
@@ -301,13 +329,14 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult UpdateTask(int id, UpdateTaskDto task)
     {   
         string username = HttpContext.Session.GetString("username");
-        if(username == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+        // if(username == null)
+        // {
+        //     return RedirectToAction("Login", "Account");
+        // }
 
     
         using(var db = new DemoContext())
