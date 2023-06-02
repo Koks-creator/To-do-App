@@ -19,44 +19,51 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="test">test</a>
-                        </li>
-                        
-                        @if(Context.Session.GetString("username") == null)
-                        {
+                    <div style="float: left;">
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>              
+                            @if(Context.Session.GetString("username") == null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="MyTasks">MyTasks</a>
+                                </li>
+                            }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ShowRecords">ShowRecords</a>
                             </li>
+                        </ul>
+                    </div>
+                    <div style="float: right;">
+                        @if(Context.Session.GetString("username") != null){
+                            <div class="btn-group" style="margin-right:40px;">
+                                <a asp-area="" asp-controller="Account" asp-action="Profile">
+                                    <button style="width:100px;" type="button" class="btn btn-light border border-dark">@Context.Session.GetString("username")</button>
+                                </a>
+                                <button type="button" class="btn btn-light border border-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddTask">Add Task</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="MyTasks">My tasks</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </div>
                         }
-                        else{
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddTask">Add Task</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="MyTasks">My tasks</a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ShowRecords">ShowRecords</a>
-                        </li>
-                    </ul>
+                    </div>
                 </div>
             </div>
         </nav>
