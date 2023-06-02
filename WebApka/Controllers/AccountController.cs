@@ -152,7 +152,7 @@ public class AccountController : Controller
     {   
         string username = HttpContext.Session.GetString("username");
         if( username == null ){
-            return RedirectToAction("Login", "Account", new { area = "" });
+            return RedirectToAction("Login", "Account");
         }
 
         if(ModelState.IsValid)
