@@ -165,14 +165,14 @@ public class AccountController : Controller
                     Title = task.Title,
                     Content = task.Content,
                     EndTime = task.EndTime,
-                    User = userExists,
+                    User = userExists,  
                     UserId = userExists.id
 
                 };
 
                 db.Add(newTask);
                 db.SaveChanges();
-
+                TempData["TaskCreated"] = "true";
                 return RedirectToAction("ViewTask", "Account", new { id = newTask.id });
             }
         }
@@ -279,6 +279,7 @@ public class AccountController : Controller
             TaskModel task = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
             db.Tasks.Remove(task);
             db.SaveChanges();
+            TempData["TaskDeleted"] = "true";
             
         }
         return RedirectToAction("MyTasks", "Account");
