@@ -2,10 +2,14 @@
 @{
     ViewData["Title"] = "MyTasks";
     var userTasks = (Dictionary<string, List<TaskModel>>) ViewData["Tasks"];
+    
+    string taskDeleted =  TempData["TaskDeleted"] as string;
+    bool isTaskDeleted = !string.IsNullOrEmpty(taskDeleted) && taskDeleted.Equals("true");
 }
 <div>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddTask">Add Task</a>
-    <br>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddTask">
+        <button type="button" class="btn btn-primary">Add Task</button>
+    </a>
     <br>
 </div>
 <div class="container text-center">
@@ -67,8 +71,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
                 <div class="card-body" style="height: 150px;">
@@ -101,9 +103,35 @@
                 </div>
             </div>
             <br>
-            <br>
         }
     </div>
     }
   </div>
 </div>
+
+@if (isTaskDeleted)
+{   
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="deleteTaskToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Task Created</strong>
+                <small>@DateTime.Now.ToString("hh:mm:ss tt")</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Task has been deleted
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var taskToast = new bootstrap.Toast(document.getElementById('deleteTaskToast'));
+            taskToast.show();
+
+            setTimeout(function () {
+                taskToast.hide();
+            }, 5000);
+        });
+    </script>
+}

@@ -4,6 +4,9 @@
 
     string taskId = TempData["TaskId"] as string;
     TaskModel task = ViewData["Task"] as TaskModel;
+
+    string newTaskCreated =  TempData["TaskCreated"] as string;
+    bool isNewTaskCreated = !string.IsNullOrEmpty(newTaskCreated) && newTaskCreated.Equals("true");
 }
 
 <div style="align: center; margin-top: 50px; margin-left: 40px; margin-right: 40px;" align="center">
@@ -99,3 +102,34 @@
     </div>
   </div>
 </div>
+
+@if (isNewTaskCreated)
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="taskToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Task Created</strong>
+                <small>@DateTime.Now.ToString("hh:mm:ss tt")</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                A new task has been created successfully!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var taskToast = new bootstrap.Toast(document.getElementById('taskToast'));
+            taskToast.show();
+
+            setTimeout(function () {
+                taskToast.hide();
+            }, 5000);
+        });
+    </script>
+}
+
+
+
+
