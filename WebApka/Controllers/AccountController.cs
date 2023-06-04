@@ -17,7 +17,7 @@ public class AccountController : Controller
     {
         string username = HttpContext.Session.GetString("username");
         if( username != null ){
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MyTasks", "Account");
         }
 
         return View();
@@ -28,7 +28,7 @@ public class AccountController : Controller
     {   
         string username = HttpContext.Session.GetString("username");
         if( username != null ){
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MyTasks", "Account");
         }
 
         if(ModelState.IsValid)
@@ -86,7 +86,7 @@ public class AccountController : Controller
         string username = HttpContext.Session.GetString("username");
 
         if( username != null ){
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MyTasks", "Account");
         }
         return View();
     }
@@ -96,7 +96,7 @@ public class AccountController : Controller
     {   
         string user_name = HttpContext.Session.GetString("username");
         if( user_name != null ){
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MyTasks", "Account");
         }
 
         if(ModelState.IsValid)
@@ -109,9 +109,9 @@ public class AccountController : Controller
                 if(userExists != null)
                 {   
                     HttpContext.Session.SetString("username", username);
-                    TempData["accountStateMessage"] = "You are logged in!";
+                    TempData["userLoggedIn"] = "true";
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MyTasks", "Account");
                 }
                 else
                 {
@@ -127,13 +127,11 @@ public class AccountController : Controller
     {   
         
         string username = HttpContext.Session.GetString("username");
-        if( username == null ){
-            return RedirectToAction("Index", "Home");
+        if( username != null ){
+            HttpContext.Session.Clear();
+            TempData["UserLoggedOut"] = "true";
         }
 
-        HttpContext.Session.Clear();
-
-        TempData["accountStateMessage"] = "You've been logged out";
         return RedirectToAction("Index", "Home");
     }
 
@@ -235,7 +233,7 @@ public class AccountController : Controller
         }
         else
         {
-             return RedirectToAction("MyTasks", "Account");
+            return RedirectToAction("MyTasks", "Account");
         }
         
     }
@@ -297,6 +295,47 @@ public class AccountController : Controller
         {   
             TaskModel task = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
             ViewData["Task"] = task;
+        }
+
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult UpdateTask(int task_id, UpdateTaskDto task)
+    {
+
+        if(ModelState.IsValid)
+        {
+            Console.WriteLine(task.Content);
+        }
+        // string username = HttpContext.Session.GetString("username");
+        // if(username == null)
+        // {
+        //     return RedirectToAction("Login", "Account");
+        // }
+
+        // using(var db = new DemoContext())
+        // {   
+        //     TaskModel task = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
+        //     ViewData["Task"] = task;
+        // }
+
+        
+        return RedirectToAction("ViewTask", "Account", new { id = task_id });
+    }
+
+    public IActionResult Profile()
+    {
+        string username = HttpContext.Session.GetString("username");
+        if(username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        using (var db = new DemoContext())
+        {
+            var user = db.Users.SingleOrDefault(a => a.Username == username);
+            ViewData["User"] = user;
         }
 
         return View();
