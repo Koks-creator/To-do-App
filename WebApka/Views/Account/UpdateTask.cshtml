@@ -4,8 +4,8 @@
     TaskModel task = ViewData["Task"] as TaskModel;
     
 }
-
-<form asp-action="UpdateTask" asp-route-id=@task.id method="post">
+@task.id
+<form asp-action="UpdateTask" asp-route-task_id=@task.id method="post">
   <div class="mb-3">
     <label for="Title" class="form-label">Title</label>
     <input type="text" class="form-control" id="Title" asp-for="Title" value=@task.Title>

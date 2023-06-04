@@ -12,20 +12,23 @@
     @accountCreatedMessage
   </div>
 }
+<div style="width: 60%;margin-left:250px;">
+  <h2 style="text-align: center;">Login</h2>
+  <hr>
+  <span asp-validation-for="Username" class="text-danger">@loginErrorMessage</span>
+  <form asp-action="Login" method="post">
+    <div class="mb-3">
+      <label for="Username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="Username" asp-for="Username">
+      <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
 
-<span asp-validation-for="Username" class="text-danger">@loginErrorMessage</span>
-<form asp-action="Login" method="post">
-  <div class="mb-3">
-    <label for="Username" class="form-label">Username</label>
-    <input type="text" class="form-control" id="Username" asp-for="Username">
-    <span asp-validation-for="Username" class="text-danger"></span>
-  </div>
+    <div class="mb-3">
+      <label for="Password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="Password" asp-for="Password">
+      <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
 
-  <div class="mb-3">
-    <label for="Password" class="form-label">Password</label>
-    <input type="password" class="form-control" id="Password" asp-for="Password">
-    <span asp-validation-for="Password" class="text-danger"></span>
-  </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>

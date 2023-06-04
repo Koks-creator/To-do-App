@@ -5,6 +5,9 @@
     
     string taskDeleted =  TempData["TaskDeleted"] as string;
     bool isTaskDeleted = !string.IsNullOrEmpty(taskDeleted) && taskDeleted.Equals("true");
+
+    string userLoggedIn =  TempData["userLoggedIn"] as string;
+    bool isUserLoggedIn = !string.IsNullOrEmpty(userLoggedIn) && userLoggedIn.Equals("true");
 }
 <div>
     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddTask">
@@ -118,7 +121,7 @@
                 <small>@DateTime.Now.ToString("hh:mm:ss tt")</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
+            <div class="toast-body text-success">
                 Task has been deleted
             </div>
         </div>
@@ -131,7 +134,34 @@
 
             setTimeout(function () {
                 taskToast.hide();
-            }, 5000);
+            }, 8000);
+        });
+    </script>
+}
+
+@if (isUserLoggedIn)
+{   
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Login</strong>
+                <small>@DateTime.Now.ToString("hh:mm:ss tt")</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-success">
+                You are logged in!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var loginToast = new bootstrap.Toast(document.getElementById('loginToast'));
+            loginToast.show();
+
+            setTimeout(function () {
+                loginToast.hide();
+            }, 8000);
         });
     </script>
 }

@@ -1,0 +1,26 @@
+@model WebApka.Models.UserModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData["Title"] = "Profile";
+    UserModel user = ViewData["User"] as UserModel;
+
+    string imagesFolderPath = Configuration["ImagesFolderPath"];
+    string accountImageFileName = Configuration["AccountImageFileName"];
+}
+
+
+<div class="card" style="width: 60%; margin-left: 250px;">
+    <div style="float: right;">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
+            <button type="button" class="btn btn-primary">Logout</button>
+        </a>
+    </div>
+    <div class="card-body" style="text-align: center;">
+        <img src="~/@imagesFolderPath/@accountImageFileName" alt="User" width="150" height="150" style="border-radius: 50%;"/>
+        <br>
+        <hr>
+        <h4>@user.Username</h4>
+        <h4>@user.Email</h4>
+    </div>
+</div>
+
