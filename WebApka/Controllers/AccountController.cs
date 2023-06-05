@@ -301,25 +301,31 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateTask(int task_id, UpdateTaskDto task)
+    public IActionResult UpdateTask(int task_id, UpdateTaskDto updatedTask)
     {
+        string username = HttpContext.Session.GetString("username");
+
+        if(username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
 
         if(ModelState.IsValid)
-        {
-            Console.WriteLine(task.Content);
+        {   
+            using(var db = new DemoContext())
+            {
+                TaskModel task = db.Tasks.SingleOrDefault(t => t.id == task_id & t.User.Username == username);
+                if(task == null)
+                {
+                    return NotFound(new { error = "Task not found." });
+                }
+
+                task.Content = updatedTask.Content;
+                task.Title = updatedTask.Title;
+                task.EndTime = updatedTask.EndTime;
+                db.SaveChanges();
+            }
         }
-        // string username = HttpContext.Session.GetString("username");
-        // if(username == null)
-        // {
-        //     return RedirectToAction("Login", "Account");
-        // }
-
-        // using(var db = new DemoContext())
-        // {   
-        //     TaskModel task = db.Tasks.SingleOrDefault(t => t.id == id & t.User.Username == username);
-        //     ViewData["Task"] = task;
-        // }
-
         
         return RedirectToAction("ViewTask", "Account", new { id = task_id });
     }
